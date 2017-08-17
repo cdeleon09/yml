@@ -1,27 +1,23 @@
-var http = require("http"),
-  fs = require('fs');
-  fs.readFile('./public/index.html', function(err, html){
-    if (err) {
-      throw err;
-    }
-    http.createServer(function (request, response) {
-       // Send the HTTP header
-       // HTTP Status: 200 : OK
-       // Content Type: text/plain
-       response.writeHeader(200, {'Content-Type': 'text/plain'});
-       response.write(html);
-       response.end();
-    }).listen(8081);
+var express = require('express'),
+  app = express(),
+  port = process.env.PORT || 3000,
+  mongoose = require('mongoose'),
+  Task = require('./api/models/userModel'),
+  bodyParser = require('body-parser');
 
-    console.log('Server running at http://127.0.0.1:8081/');
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/local');
 
-    var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/local";
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-    MongoClient.connect(url, function(err, db) {
-      db.createCollection("users", function(err, user) {
-        if (err) throw err;
-      });
-    });
+var routes = require('./api/routes/userRoute');
+routes(app);
 
-  });
+app.use(function(req, res) {
+  res.status(404).send({url: req.originalUrl + ' not found'})
+});
+
+app.listen(port);
+
+console.log('YML API server started on: ' + port);
