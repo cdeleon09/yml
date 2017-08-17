@@ -1,6 +1,6 @@
 var http = require("http"),
   fs = require('fs');
-  fs.readFile('./index.html', function(err, html){
+  fs.readFile('./public/index.html', function(err, html){
     if (err) {
       throw err;
     }
@@ -12,6 +12,16 @@ var http = require("http"),
        response.write(html);
        response.end();
     }).listen(8081);
-    // Console will print the message
+
     console.log('Server running at http://127.0.0.1:8081/');
+
+    var MongoClient = require('mongodb').MongoClient;
+    var url = "mongodb://localhost:27017/yml";
+
+    MongoClient.connect(url, function(err, db) {
+      if (err) throw err;
+      console.log("Database created!");
+      db.close();
+    });
+
   });
