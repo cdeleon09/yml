@@ -16,12 +16,12 @@ var http = require("http"),
     console.log('Server running at http://127.0.0.1:8081/');
 
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/yml";
+    var url = "mongodb://localhost:27017/local";
 
     MongoClient.connect(url, function(err, db) {
-      if (err) throw err;
-      console.log("Database created!");
-      db.close();
+      db.createCollection("users", function(err, user) {
+        if (err) throw err;
+      });
     });
 
   });
