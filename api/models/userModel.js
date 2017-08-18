@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
-  username: {
+  email: {
     type: String,
     Required: true
   },
@@ -12,15 +12,13 @@ var UserSchema = new Schema({
     type: String,
     Required: true
   },
-  email: {
+  firstName: {
     type: String,
     Required: true
   },
-  firstName: {
-    type: String
-  },
   lastName: {
-    type: String
+    type: String,
+    Required: true
   }
 });
 
