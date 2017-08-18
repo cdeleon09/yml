@@ -1,5 +1,9 @@
 module.exports = function(app) {
+  var userController = require('../controllers/userController');
   // user Routes
   app.route('/users')
-  .get(function(req, res){ res.send("this is a test") });
+  .get(userController.getUsers)
+  .post(userController.createUser);
+
+
 };
