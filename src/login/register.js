@@ -54,13 +54,26 @@ class Register extends Component {
         }
     }
 
-    onFirstNameChange(event, val) { this.setState({firstName: val}) }
-    onLastNameChange(event, val) { this.setState({lastName: val}) }
-    onEmailChange(event, val) { this.setState({email: val}) }
-    onPasswordChange(event, val) { this.setState({password: val}) }
+    onFirstNameChange(event) { this.setState({firstName: event.target.value}); }
+    onLastNameChange(event) { this.setState({lastName: event.target.value}) }
+    onEmailChange(event) { this.setState({email: event.target.value}) }
+    onPasswordChange(event) { this.setState({password: event.target.value}) }
 
-    handleSignUpClick(event) {
-
+    handleSignUpClick() {
+        fetch('http://localhost:3001/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                firstName: this.state.firstName, 
+                lastName: this.state.lastName, 
+                email: this.state.email, 
+                password: this.state.password
+            })
+        }).then(function() {
+            this.props.history.push(`/`);
+        }.bind(this))
     }
 
     render() {
