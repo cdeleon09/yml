@@ -80,44 +80,44 @@ class Register extends Component {
         return (
             <ParentDiv>
                 <MainDiv>
-                        <div>
-                            <LoginHeader>Create an account</LoginHeader>
-                            <TextField
-                                label="First Name"
-                                margin="normal"
-                                style={{width: 330}}
-                                onChange={this.onFirstNameChange}
-                            />
-                            <br />
-                            <TextField
-                                label="Last Name"
-                                margin="normal"
-                                style={{width: 330}}
-                                onChange={this.onLastNameChange}
-                            />
-                            <br />
-                            <TextField
-                                label="Email Address"
-                                margin="normal"
-                                style={{width: 330}}
-                                onChange={this.onEmailChange}
-                            />
-                            <br/>
-                            <TextField
-                                type="password"
-                                label="Password"
-                                margin="normal"
-                                style={{width: 330}}
-                                onChange={this.onPasswordChange}
-                            />
-                            <br/>
-                            <StyledButton onClick={this.handleSignUpClick}>
-                                Sign Up
-                            </StyledButton>
-                        </div>
+                    <div>
+                        <LoginHeader>Create an account</LoginHeader>
+                        <TextField
+                            label="First Name"
+                            margin="normal"
+                            style={{width: 330}}
+                            onChange={this.onFirstNameChange}
+                        />
+                        <br />
+                        <TextField
+                            label="Last Name"
+                            margin="normal"
+                            style={{width: 330}}
+                            onChange={this.onLastNameChange}
+                        />
+                        <br />
+                        <TextField
+                            label="Email Address"
+                            margin="normal"
+                            style={{width: 330}}
+                            onChange={this.onEmailChange}
+                        />
+                        <br/>
+                        <TextField
+                            type="password"
+                            label="Password"
+                            margin="normal"
+                            style={{width: 330}}
+                            onChange={this.onPasswordChange}
+                        />
+                        <br/>
+                        <StyledButton onClick={this.handleSignUpClick}>
+                            Sign Up
+                        </StyledButton>
+                    </div>
                 </MainDiv>
                 <FooterDiv>
-                    <Link to='/'>Already have an account? Login</Link>
+                    <Link to='/login'>Already have an account? Login</Link>
                 </FooterDiv>
             </ParentDiv>
         );

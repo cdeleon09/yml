@@ -53,19 +53,19 @@ class Login extends Component {
     onEmailChange(event, val) { this.setState({email: val}) }
     onPasswordChange(event, val) { this.setState({password: val}) }
 
-    handleLoginClick(event) {
-      fetch('http://localhost:3001/login', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-              email: this.state.email,
-              password: this.state.password
-          })
-      }).then(function(response) {
-
-      })
+    handleLoginClick() {
+        fetch('http://localhost:3001/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: this.state.email,
+                password: this.state.password
+            })
+        }).then(function() {
+            this.props.history.push(`/`);
+        }.bind(this))
     }
 
     render() {
@@ -73,7 +73,7 @@ class Login extends Component {
             <ParentDiv>
                 <MainDiv>
                         <div>
-                            <LoginHeader>Log into Your Magic League</LoginHeader>
+                            <LoginHeader>Log into Draw Go</LoginHeader>
 
                             <TextField
                                 label="Email Address"
