@@ -3,12 +3,8 @@ var express = require('express'),
   port = process.env.PORT || 3001,
   mongoose = require('mongoose'),
   User = require('./api/models/userModel'),
-<<<<<<< HEAD
-  bodyParser = require('body-parser')
+  bodyParser = require('body-parser'),
   cors = require('cors');
-=======
-  bodyParser = require('body-parser');
->>>>>>> a5f5a3e4dfcd4b04b224d93281d3f57eccfb7bb2
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/local');
