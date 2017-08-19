@@ -4,22 +4,16 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PodSchema = new Schema({
-  email: {
+  name: {
     type: String,
     Required: true
   },
-  password: {
-    type: String,
-    Required: true
-  },
-  firstName: {
-    type: String,
-    Required: true
-  },
-  lastName: {
-    type: String,
-    Required: true
-  }
+  players: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ]
 });
 
-module.exports = mongoose.model('Users', UserSchema);
+module.exports = mongoose.model('Pod', UserSchema);

@@ -1,6 +1,6 @@
-module.exports = function(app) {
-  var userController = require('../controllers/userController');
-  var loginController = require('../controllers/loginController');
+module.exports = function(app, passport) {
+  userController = require('../controllers/userController'),
+  loginController = require('../controllers/loginController');
 
   // user Routes
   app.route('/users')
@@ -8,6 +8,7 @@ module.exports = function(app) {
   .post(userController.createUser);
 
   // login Routes
-  app.route('/login')
-  .post(loginController.login);
+  app.post('/login', passport.authenticate('login'), function(req, res){
+    res.json({message: "Welcome!"});
+  });
 };

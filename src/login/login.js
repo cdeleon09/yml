@@ -54,21 +54,18 @@ class Login extends Component {
     onPasswordChange(event, val) { this.setState({password: val}) }
 
     handleLoginClick(event) {
-        fetch('', {
-            method: 'post',
-            body: JSON.stringify({
-                email: this.state.email,
-                password: this.state.password
-            })
-        }).then(function(response) {
-            if (response.data.code === 200) {
-                //redirect to home page
-            } else {
-                alert("email/password does not exist");
-            }
-        }).catch(function(error) {
-            console.log(error);
-        })
+      fetch('http://localhost:3001/login', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              email: this.state.email,
+              password: this.state.password
+          })
+      }).then(function(response) {
+
+      })
     }
 
     render() {

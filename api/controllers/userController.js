@@ -1,7 +1,7 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  User = mongoose.model('Users');
+  User = mongoose.model('User');
 
 exports.getUsers = function(req, res){
   User.find({}, function(err, users) {
@@ -13,18 +13,7 @@ exports.getUsers = function(req, res){
 };
 
 exports.createUser = function(req, res){
-  //var newUser = new User(req.body);
-
-  debugger;
-
-  var newUser = new User({
-    _id: req.body._id,
-    email:req.body.email,
-    password: req.body.password,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName
-  })
-
+  var newUser = new User(req.body);
   newUser.save(function(err, user){
     if (err) {
       res.send(err);
