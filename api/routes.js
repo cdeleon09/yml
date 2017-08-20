@@ -1,14 +1,24 @@
 module.exports = function(app, passport) {
-  var userController = require('./users/user.controller');
+  var userController = require('./users/user.controller'),
+  podController = require('./pods/pod.controller');
 
-  // login Routes
+  // routes that don't require authentication
   app.post('/login', passport.authenticate('login'), function(req, res){
     res.sendStatus(200);
   });
+  app.post('/users', userController.createUser);
 
-  // user Routes
-  app.route('/users')
-  .get(passport.authenticationMiddleware(), userController.getUsers)
-  .post(userController.createUser);
+  //pod routes
+  app.route('/pods')
+  .post(podController.createPod)
+  .get(podController.getPods);
 
+  app.route('/pods/:id/users')
+  .post(podController.addUserToPod);
+
+  //user routes
+  app.get('/users', userController.getUsers)
+
+  //set up passport middleware authentication for secured routes
+  app.use(passport.authenticationMiddleware());
 };
