@@ -5,9 +5,11 @@ var express = require('express'),
   passport = require('passport'),
   session = require('express-session'),
   mongoose = require('mongoose'),
-  User = require('./api/models/userModel'),
   bodyParser = require('body-parser'),
   cors = require('cors');
+
+//init Schema
+require('./api/schema').initialize();
 
 //db configuration
 mongoose.Promise = global.Promise;
@@ -24,7 +26,7 @@ app.use(session({ secret:'drawgobitches' }));
 app.use(passport.initialize());
 app.use(passport.session());
 
-var routes = require('./api/routes/routes');
+var routes = require('./api/routes');
 routes(app, passport);
 
 app.use(function(req, res) {

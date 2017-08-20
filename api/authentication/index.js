@@ -20,10 +20,16 @@ module.exports =  function(passport){
     passReqToCallback: true
   },
     function(req, email, password, done) {
-      User.findOne({ email: email, password: password }, function(err, user) {
+      User.findOne({ email: email }, function(err, user) {
         if (err) { return done(err); }
-        if (!user) { return done(null, false, { message: 'Incorrect username.' }); }
-        return done(null, user);
+        if (!user) { return done(null, false, { message: 'Email does not exist.' }); }
+        bcrypt.compare(password, user.password, function(err, res){
+          if(res){
+            return done(null, user);
+          } else {
+            return done(null, false, { message: 'Invalid email or password.'});
+          }
+        });
       });
     }
   ));
@@ -31,9 +37,9 @@ module.exports =  function(passport){
   passport.authenticationMiddleware = function authenticationMiddleware () {
     return function (req, res, next) {
       if (req.isAuthenticated()) {
-        return next()
+        return next();
       }
-      res.redirect('/login')
+      res.sendStatus(401);
     }
   };
 }

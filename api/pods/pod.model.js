@@ -16,4 +16,4 @@ var PodSchema = new Schema({
   ]
 });
 
-module.exports = mongoose.model('Pod', UserSchema);
+module.exports = mongoose.model('Pod', PodSchema);

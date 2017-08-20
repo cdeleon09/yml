@@ -6,19 +6,20 @@ var Schema = mongoose.Schema;
 var UserSchema = new Schema({
   email: {
     type: String,
-    Required: true
+    required: 'Email is required.',
+    unique: true
   },
   password: {
     type: String,
-    Required: true
+    required: 'Password is required.'
   },
   firstName: {
     type: String,
-    Required: true
+    required: 'First name is required.'
   },
   lastName: {
     type: String,
-    Required: true
+    required: 'Last name is required.'
   }
 });
 
