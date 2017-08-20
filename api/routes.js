@@ -8,7 +8,7 @@ module.exports = function(app, passport) {
 
   // user Routes
   app.route('/users')
-  .get(userController.getUsers)
+  .get(passport.authenticationMiddleware(), userController.getUsers)
   .post(userController.createUser);
 
 };
