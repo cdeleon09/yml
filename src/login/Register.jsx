@@ -3,6 +3,7 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import Layout from '../layout/Layout';
 
 const StyledButton = styled(Button)`
     margin-top: 15px;

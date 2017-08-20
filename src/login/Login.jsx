@@ -3,6 +3,7 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import logo from '../images/fish.png';
 
 const StyledButton = styled(Button)`
     margin-top: 15px;
@@ -36,6 +37,13 @@ const LoginHeader = styled.div`
     font-size: 24px;
 `;
 
+const LoginImage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+`;
+
 class Login extends Component {
     constructor(){
         super();
@@ -50,8 +58,8 @@ class Login extends Component {
         }
     }
 
-    onEmailChange(event, val) { this.setState({email: val}) }
-    onPasswordChange(event, val) { this.setState({password: val}) }
+    onEmailChange(event) { this.setState({email: event.target.value}) }
+    onPasswordChange(event) { this.setState({password: event.target.value}) }
 
     handleLoginClick() {
         fetch('http://localhost:3001/login', {
@@ -73,7 +81,10 @@ class Login extends Component {
             <ParentDiv>
                 <MainDiv>
                         <div>
-                            <LoginHeader>Log into Draw Go</LoginHeader>
+                            <LoginImage>
+                                <img src={logo} className="logoImage" alt="logo" height="50" width="50" />
+                            </LoginImage>
+                            <LoginHeader>Log in to Draw Go</LoginHeader>
 
                             <TextField
                                 label="Email Address"
