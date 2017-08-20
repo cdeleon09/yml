@@ -34,7 +34,7 @@ module.exports =  function(passport){
     }
   ));
 
-  passport.authenticationMiddleware = function authenticationMiddleware () {
+  passport.authenticationMiddleware = function authenticationMiddleware (req, res, next) {
     return function (req, res, next) {
       if (req.isAuthenticated()) {
         return next();
