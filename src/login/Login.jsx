@@ -5,11 +5,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import logo from '../images/fish.png';
 
-const StyledButton = styled(Button)`
-    margin-top: 15px;
-    width: 100%;
-`;
-
 const ParentDiv = styled.div`
     font-family: Roboto;
     font-weight: 300;
@@ -37,15 +32,8 @@ const LoginHeader = styled.div`
     font-size: 24px;
 `;
 
-const LoginImage = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-`;
-
 class Login extends Component {
-    constructor(){
+    constructor() {
         super();
 
         this.onEmailChange = this.onEmailChange.bind(this);
@@ -55,13 +43,16 @@ class Login extends Component {
         this.state = {
             email: '',
             password: '',
+            errorMsg: ''
         }
     }
 
     onEmailChange(event) { this.setState({email: event.target.value}) }
     onPasswordChange(event) { this.setState({password: event.target.value}) }
 
-    handleLoginClick() {
+    handleLoginClick(event) {
+        event.preventDefault();
+
         fetch('http://localhost:3001/login', {
             method: 'POST',
             headers: {
@@ -72,8 +63,14 @@ class Login extends Component {
                 email: this.state.email,
                 password: this.state.password
             })
-        }).then(function() {
-            this.props.history.push(`/`);
+        }).then(function(response) {
+            if (response.status === 200) {
+                this.props.history.push(`/dashboard`);
+            } else if (response.status === 400) {
+                //This should be handled by form validation?
+            } else if (response.status === 401) {
+                this.setState({ errorMsg: "Invalid email or password." });
+            }
         }.bind(this))
     }
 
@@ -82,29 +79,29 @@ class Login extends Component {
             <ParentDiv>
                 <MainDiv>
                         <div>
-                            <LoginImage>
+                            <div className="flex-center m-b-lg">
                                 <img src={logo} className="logoImage" alt="logo" height="50" width="50" />
-                            </LoginImage>
+                            </div>
                             <LoginHeader>Log in to Draw Go</LoginHeader>
-
-                            <TextField
-                                label="Email Address"
-                                margin="normal"
-                                style={{width: 330}}
-                                onChange={this.onEmailChange}
-                            />
-                            <br/>
-                            <TextField
-                                type="password"
-                                label="Password"
-                                margin="normal"
-                                style={{width: 330}}
-                                onChange={this.onPasswordChange}
-                            />
-                            <br/>
-                            <StyledButton onClick={this.handleLoginClick}>
-                                Log In
-                            </StyledButton>
+                            <div className="flex-center m-t-md m-b-md color-red">{this.state.errorMsg}</div>
+                            <form className="loginForm" onSubmit={this.handleLoginClick}>
+                                <TextField
+                                    label="Email Address"
+                                    margin="normal"
+                                    style={{width: 330}}
+                                    onChange={this.onEmailChange}
+                                />
+                                <br/>
+                                <TextField
+                                    type="password"
+                                    label="Password"
+                                    margin="normal"
+                                    style={{width: 330}}
+                                    onChange={this.onPasswordChange}
+                                />
+                                <br/>
+                                <Button type="submit" className="button-login m-t-md">Log In</Button>
+                            </form>
                         </div>
                 </MainDiv>
                 <FooterDiv>

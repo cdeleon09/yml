@@ -3,12 +3,6 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import Layout from '../layout/Layout';
-
-const StyledButton = styled(Button)`
-    margin-top: 15px;
-    width: 100%;
-`;
 
 const ParentDiv = styled.div`
     font-family: Roboto;
@@ -73,7 +67,7 @@ class Register extends Component {
                 password: this.state.password
             })
         }).then(function() {
-            this.props.history.push(`/`);
+            this.props.history.push(`/login`);
         }.bind(this))
     }
 
@@ -83,38 +77,37 @@ class Register extends Component {
                 <MainDiv>
                     <div>
                         <LoginHeader>Create an account</LoginHeader>
-                        <TextField
-                            label="First Name"
-                            margin="normal"
-                            style={{width: 330}}
-                            onChange={this.onFirstNameChange}
-                        />
-                        <br />
-                        <TextField
-                            label="Last Name"
-                            margin="normal"
-                            style={{width: 330}}
-                            onChange={this.onLastNameChange}
-                        />
-                        <br />
-                        <TextField
-                            label="Email Address"
-                            margin="normal"
-                            style={{width: 330}}
-                            onChange={this.onEmailChange}
-                        />
-                        <br/>
-                        <TextField
-                            type="password"
-                            label="Password"
-                            margin="normal"
-                            style={{width: 330}}
-                            onChange={this.onPasswordChange}
-                        />
-                        <br/>
-                        <StyledButton onClick={this.handleSignUpClick}>
-                            Sign Up
-                        </StyledButton>
+                        <form className="signUpForm" onSubmit={this.handleLoginClick}>
+                            <TextField
+                                label="First Name"
+                                margin="normal"
+                                style={{width: 330}}
+                                onChange={this.onFirstNameChange}
+                            />
+                            <br />
+                            <TextField
+                                label="Last Name"
+                                margin="normal"
+                                style={{width: 330}}
+                                onChange={this.onLastNameChange}
+                            />
+                            <br />
+                            <TextField
+                                label="Email Address"
+                                margin="normal"
+                                style={{width: 330}}
+                                onChange={this.onEmailChange}
+                            />
+                            <br/>
+                            <TextField
+                                type="password"
+                                label="Password"
+                                margin="normal"
+                                style={{width: 330}}
+                                onChange={this.onPasswordChange}
+                            />
+                        </form>
+                        <Button type="submit" className="button-login m-t-md">Sign Up</Button>
                     </div>
                 </MainDiv>
                 <FooterDiv>
