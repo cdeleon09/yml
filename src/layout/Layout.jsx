@@ -5,7 +5,7 @@ class Layout extends Component {
     render() {
         return (
             <section id="body-wrapper">
-                <Header />
+                <Header history={this.props.history} />
                 {this.props.children}
             </section>
         );

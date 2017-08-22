@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Button from 'material-ui/Button';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
 class Content extends Component {
@@ -8,8 +9,13 @@ class Content extends Component {
         return (
             <main className="content">
                 <div className="m-t-lg m-l-lg m-r-lg">
-                    <div className="section-header">Drafts</div>
-                    <div className="datatable m-t-lg">
+                    
+
+                    <div className="section-header">
+                        <div>Drafts</div>
+                        <div><Button raised color="primary">Create Draft</Button></div>
+                    </div>
+                    <div className="datatable m-t-md">
                         <Table>
                             <TableHead>
                             <TableRow>

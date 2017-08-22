@@ -5,7 +5,7 @@ import Content from './Content';
 class Dashboard extends Component {
     render() {
         return (
-            <Layout>
+            <Layout history={this.props.history}>
                 <Content />
             </Layout>
         );
