@@ -1,5 +1,7 @@
 var models = ['../users/user.model.js',
-              '../pods/pod.model.js'];
+              '../drafts/draft.model.js',
+              '../pods/pod.model.js',
+              '../matches/match.model.js'];
 
 exports.initialize = function() {
     var l = models.length;

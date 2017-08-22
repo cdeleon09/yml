@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 var PodSchema = new Schema({
   name: {
     type: String,
-    Required: true
+    required: 'Pod name is required.'
   },
   players: [
     {

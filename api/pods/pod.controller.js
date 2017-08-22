@@ -1,15 +1,14 @@
 'use strict';
 
 var mongoose = require('mongoose'),
-  User = mongoose.model('User'),
   Pod = mongoose.model('Pod');
 
 exports.getPods = function(req, res){
-  Pod.find({}, function(err, users) {
+  Pod.find({}, function(err, pods) {
     if (err) {
       res.send(err);
     }
-    res.json(users);
+    res.json(pods);
   });
 };
 
@@ -25,23 +24,10 @@ exports.createPod = function(req, res){
 };
 
 exports.addUserToPod = function(req, res){
-  if(req.body.userId <= 0){
-    res.status(400).send('Invalid user id.');
-  }
-  Pod.findById(req.params.id, function(err, pod){
-    if (err) {
-      res.send(err);
-    }
-    if(!pod){
-      res.status(400).send('Invalid pod.');
-    }
-    pod.players.push(req.body.userId);
-    pod.save(function(err, pod){
-      if (err) {
-        res.status(400).send('Failed to save pod.');
-      } else {
-        res.json(pod);
+  Pod.findByIdAndUpdate(req.params.id, {$addToSet: {users: req.body.userId}}, function(err, pod){
+      if(err){
+        res.status(400).send(err);
       }
-    })
+      res.json(pod);
   });
 };
