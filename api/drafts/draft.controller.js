@@ -4,7 +4,13 @@ var mongoose = require('mongoose'),
   Draft = mongoose.model('Draft');
 
 exports.getDrafts = function(req, res){
-  Draft.find({}, function(err, drafts) {
+  Draft.find({}).populate({
+    path:'pods',
+    populate: {
+      path: 'players',
+      model: 'User'
+    }
+  }).exec(function(err, drafts) {
     if (err) {
       res.send(err);
     }
