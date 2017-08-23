@@ -1,7 +1,6 @@
 module.exports = function(app, passport) {
     var userController = require('./users/user.controller'),
-    draftController = require('./drafts/draft.controller'),
-    podController = require('./pods/pod.controller');
+    draftController = require('./drafts/draft.controller');
 
     /**PUBLIC ROUTES**/
     app.post('/login', passport.authenticate('login'), function(req, res){
@@ -25,15 +24,8 @@ module.exports = function(app, passport) {
     app.route('/drafts/:id/pods')
     .post(draftController.addPodToDraft);
 
-    //pod routes
-    app.route('/pods')
-    .post(podController.createPod)
-    .get(podController.getPods);
-
-    app.route('/pods/:id/users')
-    .post(podController.addUserToPod);
-
-
+    app.route('/drafts/:draftId/pods/:id/users')
+    .post(draftController.addUserToPod);
 
     //set up passport middleware authentication for secured routes
     app.use(passport.authenticationMiddleware());

@@ -3,6 +3,19 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var PodSchema = new Schema({
+  name: {
+    type: String,
+    required: 'Pod name is required.'
+  },
+  players: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    }
+  ]
+});
+
 var DraftSchema = new Schema({
   name: {
     type: String,
@@ -13,12 +26,7 @@ var DraftSchema = new Schema({
     type: String,
     Required: 'Draft set is required.'
   },
-  pods: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Pod'
-    }
-  ]
+  pods: [PodSchema]
 });
 
 module.exports = mongoose.model('Draft', DraftSchema);
