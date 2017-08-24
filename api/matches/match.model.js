@@ -17,6 +17,10 @@ var MatchSchema = new Schema({
   },
   win2: {
     type: Number
+  },
+  pod: {
+      type: Schema.Types.ObjectId,
+      ref: 'Pod'
   }
 });
 
