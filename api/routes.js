@@ -30,7 +30,7 @@ module.exports = function(app, passport) {
   app.route('/drafts/:id/pods')
   .post(draftController.addPodToDraft(Draft));
 
-  app.route('/drafts/:draftId/pods/:id/users')
+  app.route('/drafts/:draftId/pods/:podId/users')
   .post(draftController.addUserToPod(Draft));
 
   //set up passport middleware authentication for secured routes

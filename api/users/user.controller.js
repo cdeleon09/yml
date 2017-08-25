@@ -6,8 +6,9 @@ exports.getUsers = function(User){
     User.find({}, function(err, users) {
       if (err) {
         res.send(err);
+      } else {
+        res.json(users);
       }
-      res.json(users);
     });
   };
 };
