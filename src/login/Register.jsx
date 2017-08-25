@@ -77,7 +77,7 @@ class Register extends Component {
                 <MainDiv>
                     <div>
                         <LoginHeader>Create an account</LoginHeader>
-                        <form className="signUpForm" onSubmit={this.handleLoginClick}>
+                        <form className="signUpForm" onSubmit={this.handleSignUpClick}>
                             <TextField
                                 label="First Name"
                                 margin="normal"
@@ -106,8 +106,8 @@ class Register extends Component {
                                 style={{width: 330}}
                                 onChange={this.onPasswordChange}
                             />
+                            <Button type="submit" className="button-login m-t-md">Sign Up</Button>
                         </form>
-                        <Button type="submit" className="button-login m-t-md">Sign Up</Button>
                     </div>
                 </MainDiv>
                 <FooterDiv>

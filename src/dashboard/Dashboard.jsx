@@ -6,7 +6,7 @@ class Dashboard extends Component {
     render() {
         return (
             <Layout history={this.props.history}>
-                <Content />
+                <Content history={this.props.history} />
             </Layout>
         );
     }
