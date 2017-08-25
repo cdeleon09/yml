@@ -1,40 +1,38 @@
 module.exports = function(app, passport) {
-    var userController = require('./users/user.controller'),
-    draftController = require('./drafts/draft.controller'),
-    podController = require('./pods/pod.controller');
+  //init models
+  var mongoose = require('mongoose'),
+  Draft = mongoose.model('Draft'),
+  User = mongoose.model('User');
 
-    /**PUBLIC ROUTES**/
-    app.post('/login', passport.authenticate('login'), function(req, res){
-        res.sendStatus(200);
-    });
-    app.get('/logout', function(req, res){
-      req.logout();
+  //init controllers
+  var userController = require('./users/user.controller'),
+  draftController = require('./drafts/draft.controller');
+
+  /**PUBLIC ROUTES**/
+  app.post('/login', passport.authenticate('login'), function(req, res){
       res.sendStatus(200);
-    });
-    app.post('/users', userController.createUser);
+  });
+  app.get('/logout', function(req, res){
+    req.logout();
+    res.sendStatus(200);
+  });
+  app.post('/users', userController.createUser(User));
 
-    /**PROTECTED ROUTES**/
-    //user routes
-    app.get('/users', userController.getUsers)
+  /**PROTECTED ROUTES**/
+  //user routes
+  app.get('/users', userController.getUsers(User))
 
-    //draft routes
-    app.route('/drafts')
-    .post(draftController.createDraft)
-    .get(draftController.getDrafts);
+  //draft routes
+  app.route('/drafts')
+  .post(draftController.createDraft(Draft))
+  .get(draftController.getDrafts(Draft));
 
-    app.route('/drafts/:id/pods')
-    .post(draftController.addPodToDraft);
+  app.route('/drafts/:id/pods')
+  .post(draftController.addPodToDraft(Draft));
 
-    //pod routes
-    app.route('/pods')
-    .post(podController.createPod)
-    .get(podController.getPods);
+  app.route('/drafts/:draftId/pods/:id/users')
+  .post(draftController.addUserToPod(Draft));
 
-    app.route('/pods/:id/users')
-    .post(podController.addUserToPod);
-
-
-
-    //set up passport middleware authentication for secured routes
-    app.use(passport.authenticationMiddleware());
+  //set up passport middleware authentication for secured routes
+  app.use(passport.authenticationMiddleware());
 };
