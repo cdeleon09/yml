@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Login from './login/Login';
-import Register from './login/Register';
-import Dashboard from './dashboard/Dashboard';
 import './App.css';
+
+//ROUTES
+import Login from 'pages/login/Login';
+import Register from 'pages/login/Register';
+import Dashboard from 'pages/dashboard/Dashboard';
+import DraftWizard from 'pages/draftWizard/DraftWizard';
+
 
 class App extends Component {
     render() {
@@ -13,6 +17,7 @@ class App extends Component {
                 <Route exact path='/login' component={Login} />
                 <Route exact path='/register' component={Register} />
                 <Route exact path='/dashboard' component={Dashboard} />
+                <Route exact path='/draftWizard' component={DraftWizard} />
             </Switch>
         );
     }
