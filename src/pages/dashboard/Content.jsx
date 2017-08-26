@@ -3,6 +3,16 @@ import Button from 'material-ui/Button';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
 class Content extends Component {
+    constructor() {
+        super();
+
+        this.createDraft = this.createDraft.bind(this);
+    }
+
+    createDraft() {
+        this.props.history.push(`/DraftWizard`);
+    }
+
     render() {
         let data = [{id: 0, name: 'draft 1'}, {id: 1, name: 'draft 2'}];
 
@@ -13,7 +23,7 @@ class Content extends Component {
 
                     <div className="section-header">
                         <div>Drafts</div>
-                        <div><Button raised color="primary">Create Draft</Button></div>
+                        <div><Button raised color="primary" onClick={this.createDraft}>Create Draft</Button></div>
                     </div>
                     <div className="datatable m-t-md">
                         <Table>

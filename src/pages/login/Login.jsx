@@ -3,7 +3,7 @@ import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import logo from '../images/fish.png';
+import logo from 'images/fish.png';
 
 const ParentDiv = styled.div`
     font-family: Roboto;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Layout from '../layout/Layout';
-import Content from './Content';
+import Layout from 'pages/layout/Layout';
+import Content from 'pages/dashboard/Content';
 
 class Dashboard extends Component {
     render() {

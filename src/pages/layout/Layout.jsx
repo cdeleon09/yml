@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Header from 'layout/Header';
+import Header from 'pages/layout/Header';
 
 class Layout extends Component {
     render() {

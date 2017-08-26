@@ -80,6 +80,13 @@
     align-items: center;
 }
 
+.panel {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 20px 20px;
+    align-items: flex-start;
+}
+
 .m-t-sm { margin-top: 5px; }
 .m-t-md { margin-top: 10px; }
 .m-t-lg { margin-top: 20px; }
