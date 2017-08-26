@@ -35,7 +35,6 @@ exports.createDraft = function(Draft){
       return draft;
     }, function(err) {res.status(400).send('Failed to create draft');})
     .then(function(draft){
-
       res.json(draft);
     });
   };
@@ -46,15 +45,39 @@ exports.addPodToDraft = function(Draft){
     Draft.findByIdAndUpdate(req.params.id, {$addToSet: {pods: req.body}}, function(err, draft){
       if(err){
         res.status(400).send(err);
+      } else {
+        res.json(draft);
       }
-      res.json(draft);
     });
   };
 };
 
 exports.addUserToPod = function(Draft){
   return function(req, res){
-    Draft.findOneAndUpdate({_id:req.params.draftId,
+    var _ = require('underscore');
+    Draft.findById(req.params.draftId).populate('pods.players').then(function(draft){
+      var pod = _.findWhere(draft.pods, {id:req.params.podId});
+      var player = _.findWhere(pod.players, {id:req.body.userId});
+      if(player){
+        res.status(400).send('Player already exists in this pod!');
+        return null;
+      }
+      for(var i=0;i < pod.players.length;i++){
+        pod.matches.push({
+          player1:req.body.userId,
+          player2:pod.players[i],
+          win1:0,
+          win2:0
+        });
+      }
+      pod.players.push(req.body.userId);
+      return draft.save();
+    }).then(function(d){
+      if(d){
+        res.json(d);
+      }
+    });
+    /*Draft.findOneAndUpdate({_id:req.params.draftId,
       "pods.$._id":req.params.podId},
       {$addToSet: { "pods.$.players" : req.body.userId}},
       {new:true},
@@ -63,6 +86,6 @@ exports.addUserToPod = function(Draft){
           res.status(400).send(err);
         }
         res.json(draft);
-    });
+    });*/
   };
 };
