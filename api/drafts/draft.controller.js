@@ -14,6 +14,7 @@ exports.getDrafts = function(Draft){
 exports.createDraft = function(Draft){
   return function(req, res){
     var newDraft = new Draft(req.body);
+    console.log(newDraft);
     var Combinatorics = require('js-combinatorics');
     for(var i=0; i < newDraft.pods.length; i++){
       if(newDraft.pods[i].players.length <= 1){
@@ -77,6 +78,12 @@ exports.addUserToPod = function(Draft){
         res.json(d);
       }
     });
+  };
+};
+
+exports.removeUserFromPod = function(Draft){
+  return function(req, res){
+
   };
 };
 

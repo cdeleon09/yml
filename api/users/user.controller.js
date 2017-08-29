@@ -15,7 +15,6 @@ exports.getUsers = function(User){
 
 exports.createUser = function(User){
   return function(req, res){
-    console.log(req.body);
     var newUser = new User(req.body);
     bcrypt.hash(newUser.password, 10, function(err, hash){
       newUser.password = hash;

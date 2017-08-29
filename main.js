@@ -7,14 +7,16 @@ var express = require('express'),
   mongoose = require('mongoose'),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser'),
-  cors = require('cors');
-
-//init Schema
-require('./api/schema').initialize();
+  cors = require('cors'),
+  autoIncrement = require('mongoose-auto-increment');
 
 //db configuration
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/local', {useMongoClient:true});
+
+//init Schema
+autoIncrement.initialize(mongoose.connection);
+require('./api/schema').initialize(autoIncrement);
 
 //init parser.
 app.use(cookieParser('drawgobitches'));
