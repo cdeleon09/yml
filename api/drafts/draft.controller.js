@@ -77,15 +77,22 @@ exports.addUserToPod = function(Draft){
         res.json(d);
       }
     });
-    /*Draft.findOneAndUpdate({_id:req.params.draftId,
-      "pods.$._id":req.params.podId},
-      {$addToSet: { "pods.$.players" : req.body.userId}},
+  };
+};
+
+exports.updateMatchResults = function(Draft){
+  return function(req, res){
+    //need to include user in the query
+    Draft.findOneAndUpdate({
+        _id:req.params.draftId, "pods._id":req.params.podId, "pods.matches._id":req.params.matchId
+      },
+      {
+        $set: {"pods.$.matches.0.win1":req.body.win1,"pods.$.matches.0.win2":req.body.win2}
+      },
       {new:true},
       function(err, draft){
-        if(err){
-          res.status(400).send(err);
-        }
         res.json(draft);
-    });*/
+      }
+    );
   };
 };
