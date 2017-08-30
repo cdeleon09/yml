@@ -56,9 +56,9 @@ exports.addPodToDraft = function(Draft){
 exports.addUserToPod = function(Draft){
   return function(req, res){
     var _ = require('underscore');
-    Draft.findById(req.params.draftId).populate('pods.players').then(function(draft){
+    Draft.findById(req.params.draftId).then(function(draft){
       var pod = _.findWhere(draft.pods, {id:req.params.podId});
-      var player = _.findWhere(pod.players, {id:req.body.userId});
+      var player = _.find(pod.players, function(p){ return p == req.body.userId; });
       if(player){
         res.status(400).send('Player already exists in this pod!');
         return null;
@@ -83,7 +83,20 @@ exports.addUserToPod = function(Draft){
 
 exports.removeUserFromPod = function(Draft){
   return function(req, res){
-
+    Draft.findById(req.params.draftId).then(function(draft){
+      var _ = require('underscore');
+      var pod = _.findWhere(draft.pods, {id:req.params.podId});
+      if(pod){
+        pod.players = _.reject(pod.players, function(p){ return p == req.params.userId; });
+        console.log(pod.matches);
+        pod.matches = _.reject(pod.matches, function(m){ return m.player1 == req.params.userId || m.player2 == req.params.userId; });
+        return draft.save();
+      }
+    }).then(function(d){
+      if(d){
+        res.json(d);
+      }
+    });
   };
 };
 
