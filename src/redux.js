@@ -16,6 +16,11 @@ export const addPods = (pods) => ({
     pods
 });
 
+export const addPlayer = (player) => ({
+    type: 'ADD_PLAYER',
+    player
+});
+
 // reducers.js
 export const draft = (state = {}, action) => {  
     switch (action.type) {
@@ -26,6 +31,11 @@ export const draft = (state = {}, action) => {
                 ...state,
                 pods: action.pods
             };
+        case 'ADD_PLAYER':
+            return {
+                ...state,
+                pods: {...state.pods, players: [...state.pods.players, action.player]}
+            }
         default:
             return state;
     }

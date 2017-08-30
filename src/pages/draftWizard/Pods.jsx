@@ -22,14 +22,16 @@ class Pods extends Component {
     }
 
     addPod(event) {
-        let pods = this.state.pods;
-        let pod = {id: pods.length, name: this.state.podName};
-        pods.push(pod);
-        this.setState({ pods: pods })
+        if (this.state.podName !== '') {
+            let pods = this.state.pods;
+            let pod = {id: pods.length, name: this.state.podName};
+            pods.push(pod);
+            this.setState({ podName: '', pods: pods })
+        }
     }
 
     onNextClick() {
-        this.props.addPods({pods: this.state.pods});
+        this.props.addPods(this.state.pods);
         this.props.nextStep();
     }
 
@@ -39,7 +41,7 @@ class Pods extends Component {
                 <div className="panel">
                     <div className="section-header">Step 2: Create Pods</div>
 
-                    <TextField className="m-t-md" onChange={this.handlePodNameChange} label="Pod Name" />
+                    <TextField className="m-t-md" value={this.state.podName} onChange={this.handlePodNameChange} label="Pod Name" />
                     <Button raised className="m-t-md" onClick={this.addPod}>Add Pod</Button>
 
                     <div className="datatable">

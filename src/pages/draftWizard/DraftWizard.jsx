@@ -3,7 +3,7 @@ import Layout from 'pages/layout/Layout';
 import Draft from 'pages/draftWizard/Draft';
 import Pods from 'pages/draftWizard/Pods';
 import Players from 'pages/draftWizard/Players';
-import { addDraft, addPods } from 'redux.js';
+import { addDraft, addPods, addPlayer } from 'redux.js';
 import { connect } from 'react-redux';
 
 //import TextField from 'material-ui/TextField';
@@ -40,7 +40,7 @@ class DraftWizard extends Component {
             <Layout history={this.props.history}>
                 {this.state.currentStep === 1 && <Draft addDraft={this.props.addDraft} nextStep={this.nextStep} />}
                 {this.state.currentStep === 2 && <Pods addPods={this.props.addPods} nextStep={this.nextStep} prevStep={this.previousStep} />}
-                {this.state.currentStep === 3 && <Players onSubmit={this.onSubmit} />}
+                {this.state.currentStep === 3 && <Players draft={this.props.draft} addPlayer={this.props.addPlayer} onSubmit={this.onSubmit} />}
             </Layout>
         );
     }
@@ -52,7 +52,8 @@ const mapStateToProps = (state, ownProps) => ({
 
 const mapDispatchToProps = {  
   addDraft,
-  addPods
+  addPods,
+  addPlayer
 };
 
 const AppContainer = connect(  
