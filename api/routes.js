@@ -33,6 +33,9 @@ module.exports = function(app, passport) {
   app.route('/drafts/:draftId/pods/:podId/users')
   .post(draftController.addUserToPod(Draft));
 
+  app.route('/drafts/:draftId/pods/:podId/users/:userId')
+  .delete(draftController.removeUserFromPod(Draft));
+
   app.route('/drafts/:draftId/pods/:podId/matches/:matchId')
   .post(draftController.updateMatchResults(Draft));
 
