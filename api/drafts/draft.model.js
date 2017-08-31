@@ -33,8 +33,7 @@ module.exports = function(autoIncrement){
     players: [
       {
         type: Number,
-        ref: 'User',
-        unique: true
+        ref: 'User'
       }
     ],
     matches: [MatchSchema]
