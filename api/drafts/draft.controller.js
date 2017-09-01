@@ -14,7 +14,6 @@ exports.getDrafts = function(Draft){
 exports.createDraft = function(Draft){
   return function(req, res){
     var newDraft = new Draft(req.body);
-    console.log(newDraft);
     var Combinatorics = require('js-combinatorics');
     for(var i=0; i < newDraft.pods.length; i++){
       if(newDraft.pods[i].players.length <= 1){
@@ -33,11 +32,9 @@ exports.createDraft = function(Draft){
       }
     }
     newDraft.save().then(function(draft){
-      return draft;
-    }, function(err) {res.status(400).send('Failed to create draft');})
-    .then(function(draft){
       res.json(draft);
-    });
+    },
+    function(err) {console.log(err); res.status(400).send('Failed to create draft');});
   };
 };
 
@@ -81,25 +78,6 @@ exports.addUserToPod = function(Draft){
   };
 };
 
-exports.removeUserFromPod = function(Draft){
-  return function(req, res){
-    Draft.findById(req.params.draftId).then(function(draft){
-      var _ = require('underscore');
-      var pod = _.findWhere(draft.pods, {id:req.params.podId});
-      if(pod){
-        pod.players = _.reject(pod.players, function(p){ return p == req.params.userId; });
-        console.log(pod.matches);
-        pod.matches = _.reject(pod.matches, function(m){ return m.player1 == req.params.userId || m.player2 == req.params.userId; });
-        return draft.save();
-      }
-    }).then(function(d){
-      if(d){
-        res.json(d);
-      }
-    });
-  };
-};
-
 exports.updateMatchResults = function(Draft){
   return function(req, res){
     //need to include user in the query
@@ -111,8 +89,56 @@ exports.updateMatchResults = function(Draft){
       },
       {new:true},
       function(err, draft){
-        res.json(draft);
+        if(err){
+          res.status(400).send(err);
+        } else {
+          res.json(draft);
+        }
       }
     );
+  };
+};
+
+exports.removeUserFromPod = function(Draft){
+  return function(req, res){
+    Draft.findById(req.params.draftId).then(function(draft){
+      var _ = require('underscore');
+      var pod = _.findWhere(draft.pods, {id:req.params.podId});
+      if(pod){
+        pod.players = _.reject(pod.players, function(p){ return p == req.params.userId; });
+        pod.matches = _.reject(pod.matches, function(m){ return m.player1 == req.params.userId || m.player2 == req.params.userId; });
+        return draft.save();
+      }
+    }).then(function(d){
+      if(d){
+        res.json(d);
+      }
+    });
+  };
+};
+
+exports.deletePod = function(Draft){
+  return function(req, res){
+    Draft.findByIdAndUpdate(req.params.draftId, {
+      $pull: {pods: {_id:req.params.podId}}
+    }, function(err, d){
+      if(err){
+        res.status(400).send(err);
+      } else {
+        res.json(d);
+      }
+    });
+  };
+};
+
+exports.deleteDraft = function(Draft){
+  return function(req, res){
+    Draft.findByIdAndRemove(req.params.id).then(function(err){
+      if(err){
+        res.status(400).send(err);
+      } else {
+        res.send();
+      }
+    });
   };
 };

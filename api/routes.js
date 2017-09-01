@@ -27,8 +27,14 @@ module.exports = function(app, passport) {
   .post(draftController.createDraft(Draft))
   .get(draftController.getDrafts(Draft));
 
+  app.route('/drafts/:id')
+  .delete(draftController.deleteDraft(Draft));
+
   app.route('/drafts/:id/pods')
   .post(draftController.addPodToDraft(Draft));
+
+  app.route('/drafts/:draftId/pods/:podId')
+  .delete(draftController.deletePod(Draft));
 
   app.route('/drafts/:draftId/pods/:podId/users')
   .post(draftController.addUserToPod(Draft));
