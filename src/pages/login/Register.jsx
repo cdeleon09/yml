@@ -75,7 +75,7 @@ class Register extends Component {
         return (
             <ParentDiv>
                 <MainDiv>
-                    <div>
+                    <div className="register">
                         <LoginHeader>Create an account</LoginHeader>
                         <form className="signUpForm" onSubmit={this.handleSignUpClick}>
                             <TextField

@@ -87,6 +87,10 @@
     align-items: flex-start;
 }
 
+.register {
+    width: 330px;
+}
+
 .m-t-sm { margin-top: 5px; }
 .m-t-md { margin-top: 10px; }
 .m-t-lg { margin-top: 20px; }

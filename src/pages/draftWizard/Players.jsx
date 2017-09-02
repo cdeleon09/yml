@@ -5,21 +5,37 @@ import Dialog, { DialogTitle } from 'material-ui/Dialog';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 
-class SimpleDialog extends React.Component {
+class AddButton extends Component {
+    handleClick = () => {
+        this.props.handleOpenModal(this.props.pod);
+    }
+
+    render() {
+        return (
+            <Button raised onClick={this.handleClick}>Add Player</Button>
+        );
+    }
+}
+
+class UserModal extends React.Component {
     constructor() {
         super();
 
+        this.handleAdd = this.handleAdd.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+
         this.state = {
-            checked: [0],
+            checked: [],
         }
     }
 
-    handleRequestClose = () => {
-        this.props.onRequestClose(this.props.selectedValue);
-    };
+    handleAdd() {
+        this.props.onRequestClose(this.props.currentPod, this.state.checked);
+    }
 
-    handleListItemClick = value => {
-        this.props.onRequestClose(value);
+    handleClose() {
+        this.setState({ checked: [] });
+        this.props.onRequestClose(this.props.currentPod, this.state.checked);
     };
 
     handleToggle = (event, value) => {
@@ -28,9 +44,9 @@ class SimpleDialog extends React.Component {
         const newChecked = [...checked];
 
         if (currentIndex === -1) {
-            newChecked.push(value);
+            newChecked.push(value); //ADD - Check.
         } else {
-            newChecked.splice(currentIndex, 1);
+            newChecked.splice(currentIndex, 1); //REMOVE - Uncheck.
         }
 
         this.setState({
@@ -42,12 +58,12 @@ class SimpleDialog extends React.Component {
         let open = this.props.open;
 
         return (
-            <Dialog onRequestClose={this.handleRequestClose} open={open}>
+            <Dialog onRequestClose={this.handleClose} open={open}>
                 <DialogTitle>Select Players</DialogTitle>
                 <div>
-                    <List>
+                    <List dense>
                         {this.props.users.map(value => (
-                            <ListItem button onClick={event => this.handleToggle(event, value)} key={value.email}>
+                            <ListItem divider onClick={event => this.handleToggle(event, value)} key={value.email}>
                                 <Checkbox
                                     checked={this.state.checked.indexOf(value) !== -1}
                                     tabIndex="-1"
@@ -57,6 +73,8 @@ class SimpleDialog extends React.Component {
                             </ListItem>
                         ))}
                     </List>
+                    <Button disableFocusRipple disableRipple color="primary" onClick={this.handleAdd}>Add</Button>
+                    <Button disableFocusRipple disableRipple color="accent" onClick={this.handleClose}>Close</Button>
                 </div>
             </Dialog>
         );
@@ -67,9 +85,13 @@ class Players extends Component {
     constructor() {
         super();
 
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+
         this.state = {
             users: [],
             open: false,
+            currentPod: {},
         }
     }
 
@@ -88,7 +110,18 @@ class Players extends Component {
         });
     }
 
-    handleRequestClose = value => {
+    handleOpenModal(pod) {
+        this.setState({ 
+            open: true, 
+            currentPod: pod 
+        });
+    }
+
+    handleCloseModal(pod, selectedUsers) {
+        //REDUX ACTION TO ADD SELECTED VALUES TO STATE
+        //Add the selected users to the table.
+        this.props.addPlayers(pod, selectedUsers);
+
         this.setState({ 
             open: false 
         });
@@ -96,6 +129,7 @@ class Players extends Component {
 
     render() {
         let pods = this.props.draft.pods;
+        let unselectedUsers = this.state.users; //Todo: Remove selected users.
 
         //Iterate on pods. Create one table per pod.
         //Each table will have just one column.
@@ -106,20 +140,29 @@ class Players extends Component {
             <section className="content">
                 <div className="section-header">Step 3: Add Players</div>
 
-                {pods.map(n => {
+                {pods.map(pod => {
                     return (
-                        <Table key={n.id}>
+                        <Table key={pod.id}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>
-                                        {n.name}
+                                        {pod.name}
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
+                                {pod.players !== undefined && pod.players.map(player => {
+                                    return (
+                                        <TableRow key={player._id}>
+                                            <TableCell>   
+                                                {player.firstName}
+                                            </TableCell>
+                                        </TableRow>
+                                    )
+                                })}
                                 <TableRow>
-                                    <TableCell>
-                                        <Button raised onClick={() => this.setState({ open: true })}>Add Player</Button>
+                                    <TableCell>   
+                                        <AddButton handleOpenModal={this.handleOpenModal} pod={pod} />
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
@@ -127,11 +170,12 @@ class Players extends Component {
                     );
                 })}
 
-                <SimpleDialog
+                <UserModal
                     selectedValue={this.state.selectedValue}
                     open={this.state.open}
-                    onRequestClose={this.handleRequestClose}
-                    users={this.state.users}
+                    onRequestClose={this.handleCloseModal}
+                    users={unselectedUsers}
+                    currentPod={this.state.currentPod}
                 />
             </section>
         );
