@@ -1,39 +1,128 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+
+const style = {
+    full: {
+        width: '100%'
+    },
+    half: {
+        width: '50%'
+    }
+}
 
 class Draft extends Component {
     constructor() {
         super();
 
-        this.setDraftName = this.setDraftName.bind(this);
-        this.onNextClick = this.onNextClick.bind(this);
+        this.handleDraftNameChange = this.handleDraftNameChange.bind(this);
+        this.handlePodNameChange = this.handlePodNameChange.bind(this);
+        this.handleAddPodClick = this.handleAddPodClick.bind(this);
+        this.handleNextClick = this.handleNextClick.bind(this);
 
         this.state = {
-            name: ''
+            name: '',
+            podName: '',
+            pods: [],
+            errorMsg: ''
         }
     }
 
-    setDraftName(event) {
-        this.setState({ name: event.target.value })
+    handleDraftNameChange(event) {
+        this.setState({ name: event.target.value });
     }
 
-    onNextClick() {
-        this.props.addDraft({name: this.state.name});
-        this.props.nextStep();
+    handlePodNameChange(event) {
+        this.setState({ podName: event.target.value })
+    }
+
+    handleAddPodClick(event) {
+        if (this.state.podName !== '') {
+            let pods = this.state.pods;
+            let pod = {id: pods.length, name: this.state.podName};
+            pods.push(pod);
+            this.setState({ podName: '', pods: pods })
+        } else {
+            this.setState({ errorMsg: 'Invalid pod name.' });
+        }
+    }
+
+    handleNextClick(event) {
+        event.preventDefault();
+
+        if (this.state.name === '') {
+            this.setState({ errorMsg: 'Invalid draft name.' });
+        } else if (this.state.pods.length === 0) {
+            this.setState({ errorMsg: 'Draft must have at least one pod.' });
+        } else {
+            this.props.addDraft(this.state.name, this.state.pods);
+            this.props.nextStep();
+        }
     }
 
     render() {
         return (
-            <div className="content">
-                <div className="panel">
-                    <div className="section-header">Step 1: Create Draft</div>
+            <div className="content flex-center full-height">
+                <div className="panel-wizard-main">
+                    <form className="panel-wizard-form" onSubmit={this.handleNextClick}>
+                        <div className="panel-wizard-header">
+                            Create Draft
+                        </div>
+                        <div className="panel-wizard-content">
+                            {this.state.errorMsg !== '' && <div className="m-b-lg color-red">{this.state.errorMsg}</div>}
+                            <div className="flex-row flex-sb">
+                                <div className="flex-1">
+                                    <TextField 
+                                        autoFocus
+                                        style={style.full}
+                                        onChange={this.handleDraftNameChange} 
+                                        label="Draft Name" 
+                                    />
+                                </div>
+                                <div className="flex-col m-l-lg flex-1">
+                                    <TextField
+                                        style={style.full}
+                                        value={this.state.podName} 
+                                        onChange={this.handlePodNameChange} 
+                                        label="Pod Name" 
+                                    />
+                                    <Button
+                                        raised
+                                        style={style.half}
+                                        className="m-t-md"
+                                        onClick={this.handleAddPodClick}>
+                                        Add Pod
+                                    </Button>
+                                </div>
+                                <div className="datatable m-l-lg flex-1">
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>Pods</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {this.state.pods.map(n => {
+                                                return (
+                                                    <TableRow key={n.id}>
+                                                        <TableCell>
+                                                            {n.name}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </div>
 
-                    <TextField className="m-t-md" onChange={this.setDraftName} label="Draft Name" />
-                    
-                    <div className="button">
-                        <Button raised className="m-t-md" onClick={this.onNextClick}>Next</Button>
-                    </div>
+
+                            </div>
+                        </div>
+                        <div className="panel-wizard-footer">
+                            <Button raised type="submit">Next</Button>
+                        </div>
+                    </form>
                 </div>
             </div>
         );

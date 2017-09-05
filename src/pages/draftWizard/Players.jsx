@@ -5,6 +5,10 @@ import Dialog, { DialogTitle } from 'material-ui/Dialog';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 
+const style = {
+    width: '400px'
+};
+
 class AddButton extends Component {
     handleClick = () => {
         this.props.handleOpenModal(this.props.pod);
@@ -21,60 +25,41 @@ class UserModal extends React.Component {
     constructor() {
         super();
 
-        this.handleAdd = this.handleAdd.bind(this);
         this.handleClose = this.handleClose.bind(this);
-
-        this.state = {
-            checked: [],
-        }
-    }
-
-    handleAdd() {
-        this.props.onRequestClose(this.props.currentPod, this.state.checked);
+        this.handleSelectAndClose = this.handleSelectAndClose.bind(this);
     }
 
     handleClose() {
-        this.setState({ checked: [] });
-        this.props.onRequestClose(this.props.currentPod, this.state.checked);
+        this.props.handleCloseModal();
     };
 
-    handleToggle = (event, value) => {
-        const { checked } = this.state;
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value); //ADD - Check.
-        } else {
-            newChecked.splice(currentIndex, 1); //REMOVE - Uncheck.
-        }
-
-        this.setState({
-            checked: newChecked,
-        });
-    };
+    handleSelectAndClose() {
+        this.props.handleSelectAndCloseModal();
+    }
 
     render() {
         let open = this.props.open;
 
         return (
             <Dialog onRequestClose={this.handleClose} open={open}>
-                <DialogTitle>Select Players</DialogTitle>
+                <DialogTitle style={style}>Select Players</DialogTitle>
                 <div>
-                    <List dense>
-                        {this.props.users.map(value => (
-                            <ListItem divider onClick={event => this.handleToggle(event, value)} key={value.email}>
+                    <List dense disablePadding>
+                        {this.props.users.map(user => (
+                            <ListItem divider onClick={event => this.props.handleToggle(event, user)} key={user._id}>
                                 <Checkbox
-                                    checked={this.state.checked.indexOf(value) !== -1}
+                                    checked={this.props.checked.indexOf(user) !== -1}
                                     tabIndex="-1"
                                     disableRipple
                                 />
-                                <ListItemText primary={value.email} />
+                                <ListItemText primary={user.firstName + ' ' + user.lastName} />
                             </ListItem>
                         ))}
                     </List>
-                    <Button disableFocusRipple disableRipple color="primary" onClick={this.handleAdd}>Add</Button>
-                    <Button disableFocusRipple disableRipple color="accent" onClick={this.handleClose}>Close</Button>
+                    <div className="flex-row flex-sb">
+                        <Button disableFocusRipple disableRipple color="primary" className="m-t-md m-b-md m-l-md" onClick={this.handleSelectAndClose}>Select</Button>
+                        <Button disableFocusRipple disableRipple color="accent" onClick={this.handleClose}>Close</Button>
+                    </div>
                 </div>
             </Dialog>
         );
@@ -87,11 +72,14 @@ class Players extends Component {
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handleSelectAndCloseModal = this.handleSelectAndCloseModal.bind(this);
 
         this.state = {
             users: [],
+            filteredUsers: [],
             open: false,
             currentPod: {},
+            checked: [],
         }
     }
 
@@ -110,73 +98,124 @@ class Players extends Component {
         });
     }
 
-    handleOpenModal(pod) {
-        this.setState({ 
-            open: true, 
-            currentPod: pod 
-        });
-    }
+    handleToggle = (event, value) => {
+        const { checked } = this.state;
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
 
-    handleCloseModal(pod, selectedUsers) {
-        //REDUX ACTION TO ADD SELECTED VALUES TO STATE
-        //Add the selected users to the table.
-        this.props.addPlayers(pod, selectedUsers);
+        if (currentIndex === -1) {
+            newChecked.push(value); //ADD - Check.
+        } else {
+            newChecked.splice(currentIndex, 1); //REMOVE - Uncheck.
+        }
 
-        this.setState({ 
-            open: false 
+        this.setState({
+            checked: newChecked,
         });
     };
 
+    handleOpenModal(pod) {
+        let filteredUsers = this.state.users.slice(0);
+        let pods = this.props.draft.pods;
+        let selectedUsers = [];
+
+        for (var i = 0; i < pods.length; i++) {
+            //If user is selected in other pods, remove it from the list.
+            //If user is selected in this pod, check it.
+            if (pods[i] !== pod && pods[i].players !== undefined) {
+                for (var j = 0; j < pods[i].players.length; j++) {
+                    let index = filteredUsers.indexOf(pods[i].players[j]);
+                    if (index !== -1) { filteredUsers.splice(index, 1); }
+                }
+            } else if (pods[i] === pod && pods[i].players !== undefined) {
+                for (var k = 0; k < pods[i].players.length; k++) {
+                    selectedUsers.push(pods[i].players[k]);
+                }
+            }
+        }
+        
+        this.setState({ 
+            open: true, 
+            currentPod: pod,
+            filteredUsers: filteredUsers,
+            checked: selectedUsers
+        });
+    }
+
+    handleCloseModal() {
+        this.setState({ 
+            open: false,
+            checked: [] 
+        });
+    };
+
+    handleSelectAndCloseModal() {
+        this.props.addPlayers(this.state.currentPod, this.state.checked)
+        
+        this.setState({ 
+            open: false,
+            checked: [] 
+        });
+    }
+
     render() {
         let pods = this.props.draft.pods;
-        let unselectedUsers = this.state.users; //Todo: Remove selected users.
-
-        //Iterate on pods. Create one table per pod.
-        //Each table will have just one column.
-        //Button in each column to open User lookup.
-        //Selecting the User will add them to the state prompting a table re-render.
 
         return (
-            <section className="content">
-                <div className="section-header">Step 3: Add Players</div>
+            <section className="content flex-center full-height">
+                <div className="panel-wizard-main">
+                    <div className="panel-wizard-header">
+                        Select Players
+                    </div>
+                    <div className="panel-wizard-content flex-row">
+                        {pods.map(pod => {
+                            return (
+                                <div className="datatable datatable-wizard m-r-lg m-b-lg" key={pod.id}>
+                                    <Table>
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>
+                                                    {pod.name}
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {pod.players !== undefined && pod.players.map(player => {
+                                                return (
+                                                    <TableRow key={player._id}>
+                                                        <TableCell>   
+                                                            {player.firstName} {player.lastName}
+                                                        </TableCell>
+                                                    </TableRow>
+                                                )
+                                            })}
+                                            <TableRow>
+                                                <TableCell>   
+                                                    <AddButton handleOpenModal={this.handleOpenModal} pod={pod} />
+                                                </TableCell>
+                                            </TableRow>
+                                        </TableBody>
+                                    </Table>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    <div className="panel-wizard-footer">
+                        <Button raised onClick={this.props.prevStep}>Back</Button>
+                        <Button raised className="m-l-md" onClick={this.props.onSubmit}>Finish</Button>
+                    </div>
 
-                {pods.map(pod => {
-                    return (
-                        <Table key={pod.id}>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>
-                                        {pod.name}
-                                    </TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {pod.players !== undefined && pod.players.map(player => {
-                                    return (
-                                        <TableRow key={player._id}>
-                                            <TableCell>   
-                                                {player.firstName}
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                                <TableRow>
-                                    <TableCell>   
-                                        <AddButton handleOpenModal={this.handleOpenModal} pod={pod} />
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
-                    );
-                })}
-
-                <UserModal
-                    selectedValue={this.state.selectedValue}
-                    open={this.state.open}
-                    onRequestClose={this.handleCloseModal}
-                    users={unselectedUsers}
-                    currentPod={this.state.currentPod}
-                />
+                    <UserModal
+                        addPlayers={this.props.addPlayers}
+                        open={this.state.open}
+                        users={this.state.filteredUsers}
+                        currentPod={this.state.currentPod}
+                        checked={this.state.checked}
+                        handleToggle={this.handleToggle}
+                        handleCloseModal={this.handleCloseModal}
+                        handleSelectAndCloseModal={this.handleSelectAndCloseModal}
+                    />
+                </div>
             </section>
         );
     }

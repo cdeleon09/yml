@@ -6,13 +6,9 @@ import {
 import logger from 'redux-logger';
   
 // actions.js
-export const addDraft = (draft) => ({  
+export const addDraft = (draft, pods) => ({  
     type: 'ADD_DRAFT',
     draft,
-});
-
-export const addPods = (pods) => ({
-    type: 'ADD_PODS',
     pods
 });
 
@@ -26,10 +22,8 @@ export const addPlayers = (pod, players) => ({
 export const draft = (state = {}, action) => {  
     switch (action.type) {
         case 'ADD_DRAFT':
-            return action.draft;
-        case 'ADD_PODS':
             return {
-                ...state,
+                name: action.draft,
                 pods: action.pods
             };
         case 'ADD_PLAYER':
