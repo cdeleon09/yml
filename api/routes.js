@@ -19,6 +19,9 @@ module.exports = function(app, passport) {
   app.post('/users', userController.createUser(User));
 
   /**PROTECTED ROUTES**/
+  //set up passport middleware authentication for secured routes
+  app.use(passport.authenticationMiddleware());
+  
   //user routes
   app.get('/users', userController.getUsers(User))
 
@@ -45,6 +48,5 @@ module.exports = function(app, passport) {
   app.route('/drafts/:draftId/pods/:podId/matches/:matchId')
   .post(draftController.updateMatchResults(Draft));
 
-  //set up passport middleware authentication for secured routes
-  app.use(passport.authenticationMiddleware());
+
 };

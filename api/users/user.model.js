@@ -20,6 +20,9 @@ module.exports = function(autoIncrement){
     lastName: {
       type: String,
       required: 'Last name is required.'
+    },
+    isAdmin: {
+      type: Boolean 
     }
   });
 

@@ -6,6 +6,10 @@ class Content extends Component {
     constructor() {
         super();
 
+        this.state = {
+            drafts:[]
+        };
+
         this.createDraft = this.createDraft.bind(this);
     }
 
@@ -13,14 +17,42 @@ class Content extends Component {
         this.props.history.push(`/DraftWizard`);
     }
 
-    render() {
-        let data = [{id: 0, name: 'draft 1'}, {id: 1, name: 'draft 2'}];
+    componentWillMount() {
+      fetch('http://localhost:3001/drafts', {
+          method: 'GET',
+          credentials: 'include'
+      })
+      .then(res => res.json())
+      .then(json => {
+        this.setState({drafts:json});
+      });
+    }
 
+    renderDraftRows(d){
+      return d.pods.map(p => {
+        return (
+          <TableRow key={p._id}>
+            <TableCell>
+              {d.name}
+            </TableCell>
+            <TableCell>
+              {p.name}
+            </TableCell>
+            <TableCell numeric>
+              {p.players.length}
+            </TableCell>
+            <TableCell numeric>
+              0
+            </TableCell>
+          </TableRow>
+        );
+      });
+    }
+
+    render() {
         return (
             <main className="content">
                 <div className="m-t-lg m-l-lg m-r-lg">
-                    
-
                     <div className="section-header">
                         <div>Drafts</div>
                         <div><Button raised color="primary" onClick={this.createDraft}>Create Draft</Button></div>
@@ -30,30 +62,13 @@ class Content extends Component {
                             <TableHead>
                             <TableRow>
                                 <TableCell>Draft Name</TableCell>
+                                <TableCell>Pod</TableCell>
                                 <TableCell numeric># Players</TableCell>
                                 <TableCell numeric>% Complete</TableCell>
-                                <TableCell numeric> </TableCell>
                             </TableRow>
                             </TableHead>
                             <TableBody>
-                                {data.map(n => {
-                                    return (
-                                        <TableRow key={n.id}>
-                                            <TableCell>
-                                            {n.name}
-                                            </TableCell>
-                                            <TableCell numeric>
-                                            0
-                                            </TableCell>
-                                            <TableCell numeric>
-                                            0
-                                            </TableCell>
-                                            <TableCell numeric>
-                                            0
-                                            </TableCell>
-                                        </TableRow>
-                                        );
-                                    })}
+                                {this.state.drafts.map(d => { return this.renderDraftRows(d); })}
                             </TableBody>
                         </Table>
                     </div>

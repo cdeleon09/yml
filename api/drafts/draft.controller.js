@@ -1,12 +1,13 @@
 'use strict';
 exports.getDrafts = function(Draft){
   return function(req, res){
-    Draft.find({}).populate('pods.players pods.matches.player1 pods.matches.player2')
+    Draft.find({ "pods.players" : req.user._id }).populate('pods.players pods.matches.player1 pods.matches.player2')
     .exec(function(err, drafts) {
       if (err) {
-        res.send(err);
+        res.status(400).send(err);
+      } else {
+        res.json(drafts);
       }
-      res.json(drafts);
     });
   };
 };
