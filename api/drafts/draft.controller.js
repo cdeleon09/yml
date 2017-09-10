@@ -14,7 +14,7 @@ exports.getDrafts = function(Draft){
 
 exports.createDraft = function(Draft){
   return function(req, res){
-    var newDraft = new Draft(req.body);
+    var newDraft = new Draft(req.body.draft);
     var Combinatorics = require('js-combinatorics');
     for(var i=0; i < newDraft.pods.length; i++){
       if(newDraft.pods[i].players.length <= 1){

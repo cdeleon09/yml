@@ -44,8 +44,7 @@ module.exports = function(autoIncrement){
   var DraftSchema = new Schema({
     name: {
       type: String,
-      required: 'Draft name is required.',
-      unique: true
+      required: 'Draft name is required.'
     },
     draftSet: {
       type: String,

@@ -6,7 +6,12 @@ import List, { ListItem, ListItemText } from 'material-ui/List';
 import Checkbox from 'material-ui/Checkbox';
 
 const style = {
-    width: '400px'
+    modalWidth: {
+        width: '400px'
+    }, 
+    rowHeight: {
+        height: '30px'
+    }
 };
 
 class AddButton extends Component {
@@ -42,11 +47,11 @@ class UserModal extends React.Component {
 
         return (
             <Dialog onRequestClose={this.handleClose} open={open}>
-                <DialogTitle style={style}>Select Players</DialogTitle>
+                <DialogTitle style={style.modalWidth}>Select Players</DialogTitle>
                 <div>
                     <List dense disablePadding>
                         {this.props.users.map(user => (
-                            <ListItem divider onClick={event => this.props.handleToggle(event, user)} key={user._id}>
+                            <ListItem style={style.rowHeight} divider onClick={event => this.props.handleToggle(event, user)} key={user._id}>
                                 <Checkbox
                                     checked={this.props.checked.indexOf(user) !== -1}
                                     tabIndex="-1"
@@ -170,32 +175,31 @@ class Players extends Component {
                     <div className="panel-wizard-content flex-row">
                         {pods.map(pod => {
                             return (
-                                <div className="datatable datatable-wizard m-r-lg m-b-lg" key={pod.id}>
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>
-                                                    {pod.name}
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {pod.players !== undefined && pod.players.map(player => {
-                                                return (
-                                                    <TableRow key={player._id}>
-                                                        <TableCell>   
-                                                            {player.firstName} {player.lastName}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                )
-                                            })}
-                                            <TableRow>
-                                                <TableCell>   
-                                                    <AddButton handleOpenModal={this.handleOpenModal} pod={pod} />
-                                                </TableCell>
-                                            </TableRow>
-                                        </TableBody>
-                                    </Table>
+                                <div className="m-r-lg m-b-lg" key={pod.id}>
+                                    <AddButton handleOpenModal={this.handleOpenModal} pod={pod} />
+
+                                    <div className="datatable datatable-wizard m-t-lg">
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>
+                                                        {pod.name}
+                                                    </TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {pod.players !== undefined && pod.players.map(player => {
+                                                    return (
+                                                        <TableRow style={style.rowHeight} key={player._id}>
+                                                            <TableCell>   
+                                                                {player.firstName} {player.lastName}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    )
+                                                })}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
                                 </div>
                             );
                         })}
