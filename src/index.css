@@ -12,3 +12,7 @@ a {
 a:visited {
   color: black;
 }
+
+th {
+  font-weight: 300;
+}

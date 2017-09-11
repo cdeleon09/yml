@@ -11,6 +11,13 @@ const style = {
     }, 
     rowHeight: {
         height: '30px'
+    },
+    tableHeader: {
+        height: '40px',
+        fontSize: '18px',
+        fontWeight: '300',
+        color: '#000000',
+        backgroundColor: '#eeeeee'
     }
 };
 
@@ -21,7 +28,7 @@ class AddButton extends Component {
 
     render() {
         return (
-            <Button raised onClick={this.handleClick}>Add Player</Button>
+            <Button color="primary" onClick={this.handleClick}>Add Player</Button>
         );
     }
 }
@@ -175,13 +182,15 @@ class Players extends Component {
                     <div className="panel-wizard-content flex-row">
                         {pods.map(pod => {
                             return (
-                                <div className="m-r-lg m-b-lg" key={pod.id}>
-                                    <AddButton handleOpenModal={this.handleOpenModal} pod={pod} />
+                                <div className="m-r-lg m-b-lg flex-1" key={pod.id}>
+                                    <div className="p-t-lg">
+                                        <AddButton handleOpenModal={this.handleOpenModal} pod={pod} />
+                                    </div>
 
-                                    <div className="datatable datatable-wizard m-t-lg">
+                                    <div className="datatable datatable-wizard m-t-md">
                                         <Table>
                                             <TableHead>
-                                                <TableRow>
+                                                <TableRow style={style.tableHeader}>
                                                     <TableCell>
                                                         {pod.name}
                                                     </TableCell>

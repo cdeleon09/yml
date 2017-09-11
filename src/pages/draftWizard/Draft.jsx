@@ -9,6 +9,13 @@ const style = {
     },
     half: {
         width: '50%'
+    },
+    tableHeader: {
+        height: '40px',
+        fontSize: '18px',
+        fontWeight: '300',
+        color: '#000000',
+        backgroundColor: '#eeeeee'
     }
 }
 
@@ -70,8 +77,8 @@ class Draft extends Component {
                             Create Draft
                         </div>
                         <div className="panel-wizard-content">
-                            {this.state.errorMsg !== '' && <div className="m-b-lg color-red">{this.state.errorMsg}</div>}
-                            <div className="flex-row flex-sb">
+                            {this.state.errorMsg !== '' && <div className="p-t-lg m-b-sm color-red">{this.state.errorMsg}</div>}
+                            <div className="flex-row flex-sb p-t-lg">
                                 <div className="flex-1">
                                     <TextField 
                                         autoFocus
@@ -95,28 +102,28 @@ class Draft extends Component {
                                         Add Pod
                                     </Button>
                                 </div>
-                                <div className="datatable m-l-lg flex-1">
-                                    <Table>
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>Pods</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {this.state.pods.map(n => {
-                                                return (
-                                                    <TableRow key={n.id}>
-                                                        <TableCell>
-                                                            {n.name}
-                                                        </TableCell>
-                                                    </TableRow>
-                                                );
-                                            })}
-                                        </TableBody>
-                                    </Table>
+                                <div className="m-l-lg flex-1">
+                                    <div className="datatable">
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow style={style.tableHeader}>
+                                                    <TableCell>Pods</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {this.state.pods.map(n => {
+                                                    return (
+                                                        <TableRow key={n.id}>
+                                                            <TableCell>
+                                                                {n.name}
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    );
+                                                })}
+                                            </TableBody>
+                                        </Table>
+                                    </div>
                                 </div>
-
-
                             </div>
                         </div>
                         <div className="panel-wizard-footer">
